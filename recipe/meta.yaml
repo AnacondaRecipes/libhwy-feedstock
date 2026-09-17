@@ -1,7 +1,8 @@
+{% set name = "libhwy" %}
 {% set version = "1.4.0" %}
 
 package:
-  name: "libhwy"
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
@@ -9,17 +10,18 @@ source:
   sha256: e72241ac9524bb653ae52ced768b508045d4438726a303f10181a38f764a453c
 
 build:
-  number: 1
+  number: 0
   run_exports:
     - {{ pin_subpackage('libhwy', max_pin='x.x') }}
 
 requirements:
   build:
+    - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
     - cmake
     - pkg-config            # [unix]
-    - ninja
+    - ninja-base
 
 test:
   commands:
@@ -37,9 +39,18 @@ test:
 
 about:
   home: https://github.com/google/highway
+  dev_url: https://github.com/google/highway
+  doc_url: https://google.github.io/highway/
   license: Apache-2.0 OR BSD-3-Clause
+  license_family: Apache
   license_file: LICENSE
   summary: Efficient and performance-portable vector software
+  description: |
+    Highway is a C++ library that provides portable SIMD/vector intrinsics.
+    It supports x86 (SSE4, AVX2, AVX-512, ...), ARM (NEON, SVE, ...), RISC-V
+    and other architectures, allowing the same source to be compiled once and
+    dispatched at runtime to the best available instruction set. Highway is
+    length-agnostic, so the same code works for any vector width.
 
 extra:
   recipe-maintainers:
